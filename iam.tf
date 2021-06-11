@@ -1,4 +1,4 @@
-# Create eks-cluster iam role
+# Create eks_cluster iam role
 resource "aws_iam_role" "eks_cluster" {
   name = "eks-cluster"
 
@@ -18,7 +18,7 @@ resource "aws_iam_role" "eks_cluster" {
 POLICY
 }
 
-# Attach EKSClusterPolicy & EKSServicePolicy to eks-cluster iam role
+# Attach EKSClusterPolicy & EKSServicePolicy to eks_cluster iam role
 resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks_cluster.name
@@ -28,3 +28,26 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.eks_cluster.name
 }
+
+# Create eks_nodes iam role
+resource "aws_iam_role" "eks_nodes" {
+  name = "eks-node-group-levelup"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+
+
